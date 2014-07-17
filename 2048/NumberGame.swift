@@ -88,19 +88,20 @@ class NumberGameViewController : UIViewController, Protocol4GameView {
         resetBtn.removeFromSuperview()
     }
     
-    func upCommand() {
-        board!.upFlick()
-    }
-    
-    func downCommand() {
-        board!.downFlick()
-    }
-    
     func leftCommand() {
-        board!.leftFlick()
+        board!.flick(3)
     }
     
     func rightCommand() {
-        board!.rightFlick()
+        board!.flick(2)
     }
+    
+    func upCommand() {
+        board!.flick(1)
+    }
+    
+    func downCommand() {
+        board!.flick(0)
+    }
+
 }

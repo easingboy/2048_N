@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 class GameboardView : UIView {
     var dimension: Int
     
@@ -184,7 +182,14 @@ class GameboardView : UIView {
         scoreView.scoreChanged(newScore: scoreTotal)
     }
     
-    func leftFlick() {
+    func flick(direct:Int) {
+        //left : 3
+        //right: 2
+        //up   : 1
+        //down : 0
+        var leftright_or_updown = (direct/2)*2-1   //1:left_right    -1:up_down(交换坐标)
+        var leftup_or_rightdown = (direct%2)*2-1   //1:left_up       -1:right_down(逆序)
+
         var hasChangeFlag:Bool = false
         var getLastValueFlag:Bool
         var lastValue:Int
@@ -193,93 +198,61 @@ class GameboardView : UIView {
         for di in 0..dimension {
             getLastValueFlag = false
             lastValue = -1
-            lastIndex = -1
-            movedIndex = 0
-            for dj in 0..dimension {
-                var currentValue: Int = blockData[di, dj]
-                if currentValue != 0 {
-                    //println("current_i:\(di) current_j:\(dj) getLastValueFlag:\(getLastValueFlag) lastValue:\(lastValue) lastIndex:\(lastIndex) currentValue:\(currentValue) movedIndex:\(movedIndex)")
-                    if getLastValueFlag {
-                        if currentValue != lastValue { //两个值不同
-                            if lastIndex > movedIndex { //需要移动
-                                moveOneBlock((lastIndex, di), to:(movedIndex, di))
-                                hasChangeFlag = true
-                                blockData[di, movedIndex] = lastValue
-                                blockData[di, lastIndex] = 0
-                            }
-                            lastValue = currentValue
-                            lastIndex = dj
-                        }
-                        else {//两个值相同
-                            moveTwoBlock(((lastIndex, di), (dj, di)), to:(movedIndex, di), value:(lastValue + currentValue))
-                            hasChangeFlag = true
-                            blockData[di, lastIndex] = 0
-                            blockData[di, dj] = 0
-                            blockData[di, movedIndex] = lastValue + currentValue
-                            getLastValueFlag = false
-                            lastValue = -1
-                            lastIndex = -1
-                        }
-                        movedIndex = movedIndex + 1
-                    }
-                    else {
-                        getLastValueFlag = true
-                        lastValue = currentValue
-                        lastIndex = dj
-                    }
-                }
+            if leftup_or_rightdown == 1 {
+                lastIndex = -1
+                movedIndex = 0
             }
-            if getLastValueFlag && lastIndex > movedIndex { //处理最后一个数
-                moveOneBlock((lastIndex, di), to:(movedIndex, di))
-                hasChangeFlag = true
-                blockData[di, movedIndex] = lastValue
-                blockData[di, lastIndex] = 0
+            else {
+                lastIndex = dimension
+                movedIndex = dimension-1
             }
-        }
-        if hasChangeFlag {
-            insertRandom()
-        }
-    }
-    
-    func rightFlick() {
-        var hasChangeFlag:Bool = false
-        var getLastValueFlag:Bool
-        var lastValue:Int
-        var lastIndex:Int
-        var movedIndex:Int
-        for di in 0..dimension {
-            var dj:Int = 0
-            getLastValueFlag = false
-            lastValue = -1
-            lastIndex = dimension
-            movedIndex = dimension-1
             for j in 0..dimension {
-                dj = dimension-1 - j
-                var currentValue: Int = blockData[di, dj]
+                var dj:Int = 0
+                if leftup_or_rightdown == 1 {dj = j}
+                else {dj = dimension-1 - j}
+                var currentValue: Int = 0
+                if leftright_or_updown == 1 { currentValue = blockData[di, dj] }
+                else { currentValue = blockData[dj, di] }
                 if currentValue != 0 {
                     //println("current_i:\(di) current_j:\(dj) getLastValueFlag:\(getLastValueFlag) lastValue:\(lastValue) lastIndex:\(lastIndex) currentValue:\(currentValue) movedIndex:\(movedIndex)")
                     if getLastValueFlag {
                         if currentValue != lastValue { //两个值不同
-                            if lastIndex < movedIndex { //需要移动
-                                moveOneBlock((lastIndex, di), to:(movedIndex, di))
+                            if leftup_or_rightdown*lastIndex > leftup_or_rightdown*movedIndex { //需要移动
+                                if leftright_or_updown == 1 {
+                                    moveOneBlock((lastIndex, di), to:(movedIndex, di))
+                                    blockData[di, movedIndex] = lastValue
+                                    blockData[di, lastIndex] = 0
+                                }
+                                else {
+                                    moveOneBlock((di, lastIndex), to:(di, movedIndex))
+                                    blockData[movedIndex, di] = lastValue
+                                    blockData[lastIndex, di] = 0
+                                }
                                 hasChangeFlag = true
-                                blockData[di, movedIndex] = lastValue
-                                blockData[di, lastIndex] = 0
                             }
                             lastValue = currentValue
                             lastIndex = dj
                         }
                         else {//两个值相同
-                            moveTwoBlock(((lastIndex, di), (dj, di)), to:(movedIndex, di), value:(lastValue + currentValue))
+                            if leftright_or_updown == 1 {
+                                moveTwoBlock(((lastIndex, di), (dj, di)), to:(movedIndex, di), value:(lastValue + currentValue))
+                                blockData[di, lastIndex] = 0
+                                blockData[di, dj] = 0
+                                blockData[di, movedIndex] = lastValue + currentValue
+                            }
+                            else {
+                                moveTwoBlock(((di, lastIndex), (di, dj)), to:(di, movedIndex), value:(lastValue + currentValue))
+                                blockData[lastIndex, di] = 0
+                                blockData[dj, di] = 0
+                                blockData[movedIndex, di] = lastValue + currentValue
+                            }
                             hasChangeFlag = true
-                            blockData[di, lastIndex] = 0
-                            blockData[di, dj] = 0
-                            blockData[di, movedIndex] = lastValue + currentValue
                             getLastValueFlag = false
                             lastValue = -1
-                            lastIndex = dimension
+                            if leftup_or_rightdown == 1 {lastIndex = -1}
+                            else {lastIndex = dimension}
                         }
-                        movedIndex = movedIndex - 1
+                        movedIndex = movedIndex + leftup_or_rightdown
                     }
                     else {
                         getLastValueFlag = true
@@ -288,11 +261,18 @@ class GameboardView : UIView {
                     }
                 }
             }
-            if getLastValueFlag && lastIndex < movedIndex { //处理最后一个数
-                moveOneBlock((lastIndex, di), to:(movedIndex, di))
+            if getLastValueFlag && leftup_or_rightdown*lastIndex > leftup_or_rightdown*movedIndex { //处理最后一个数
+                if leftright_or_updown == 1 {
+                    moveOneBlock((lastIndex, di), to:(movedIndex, di))
+                    blockData[di, movedIndex] = lastValue
+                    blockData[di, lastIndex] = 0
+                }
+                else {
+                    moveOneBlock((di, lastIndex), to:(di, movedIndex))
+                    blockData[movedIndex, di] = lastValue
+                    blockData[lastIndex, di] = 0
+                }
                 hasChangeFlag = true
-                blockData[di, movedIndex] = lastValue
-                blockData[di, lastIndex] = 0
             }
         }
         if hasChangeFlag {
@@ -300,121 +280,7 @@ class GameboardView : UIView {
         }
     }
 
+    //======================================================================================
     
-    func upFlick() {
-        var hasChangeFlag:Bool = false
-        var getLastValueFlag:Bool
-        var lastValue:Int
-        var lastIndex:Int
-        var movedIndex:Int
-        for dj in 0..dimension {
-            getLastValueFlag = false
-            lastValue = -1
-            lastIndex = -1
-            movedIndex = 0
-            for di in 0..dimension {
-                var currentValue: Int = blockData[di, dj]
-                if currentValue != 0 {
-                    //println("current_i:\(di) current_j:\(dj) getLastValueFlag:\(getLastValueFlag) lastValue:\(lastValue) lastIndex:\(lastIndex) currentValue:\(currentValue) movedIndex:\(movedIndex)")
-                    if getLastValueFlag {
-                        if currentValue != lastValue { //两个值不同
-                            if lastIndex > movedIndex { //需要移动
-                                moveOneBlock((dj, lastIndex), to:(dj, movedIndex))
-                                hasChangeFlag = true
-                                blockData[movedIndex, dj] = lastValue
-                                blockData[lastIndex, dj] = 0
-                            }
-                            lastValue = currentValue
-                            lastIndex = di
-                        }
-                        else {//两个值相同
-                            moveTwoBlock(((dj, lastIndex), (dj, di)), to:(dj, movedIndex), value:(lastValue + currentValue))
-                            hasChangeFlag = true
-                            blockData[lastIndex, dj] = 0
-                            blockData[di, dj] = 0
-                            blockData[movedIndex, dj] = lastValue + currentValue
-                            getLastValueFlag = false
-                            lastValue = -1
-                            lastIndex = -1
-                        }
-                        movedIndex = movedIndex + 1
-                    }
-                    else {
-                        getLastValueFlag = true
-                        lastValue = currentValue
-                        lastIndex = di
-                    }
-                }
-            }
-            if getLastValueFlag && lastIndex > movedIndex { //处理最后一个数
-                moveOneBlock((dj, lastIndex), to:(dj, movedIndex))
-                hasChangeFlag = true
-                blockData[movedIndex, dj] = lastValue
-                blockData[lastIndex, dj] = 0
-            }
-        }
-        if hasChangeFlag {
-            insertRandom()
-        }
-    }
-    
-    func downFlick() {
-        var hasChangeFlag:Bool = false
-        var getLastValueFlag:Bool
-        var lastValue:Int
-        var lastIndex:Int
-        var movedIndex:Int
-        for dj in 0..dimension {
-            var di:Int = 0
-            getLastValueFlag = false
-            lastValue = -1
-            lastIndex = dimension
-            movedIndex = dimension-1
-            for i in 0..dimension {
-                di = dimension-1 - i
-                var currentValue: Int = blockData[di, dj]
-                if currentValue != 0 {
-                    //println("current_i:\(di) current_j:\(dj) getLastValueFlag:\(getLastValueFlag) lastValue:\(lastValue) lastIndex:\(lastIndex) currentValue:\(currentValue) movedIndex:\(movedIndex)")
-                    if getLastValueFlag {
-                        if currentValue != lastValue { //两个值不同
-                            if lastIndex < movedIndex { //需要移动
-                                moveOneBlock((dj, lastIndex), to:(dj, movedIndex))
-                                hasChangeFlag = true
-                                blockData[movedIndex, dj] = lastValue
-                                blockData[lastIndex, dj] = 0
-                            }
-                            lastValue = currentValue
-                            lastIndex = di
-                        }
-                        else {//两个值相同
-                            moveTwoBlock(((dj, lastIndex), (dj, di)), to:(dj, movedIndex), value:(lastValue + currentValue))
-                            hasChangeFlag = true
-                            blockData[lastIndex, dj] = 0
-                            blockData[di, dj] = 0
-                            blockData[movedIndex, dj] = lastValue + currentValue
-                            getLastValueFlag = false
-                            lastValue = -1
-                            lastIndex = dimension
-                        }
-                        movedIndex = movedIndex - 1
-                    }
-                    else {
-                        getLastValueFlag = true
-                        lastValue = currentValue
-                        lastIndex = di
-                    }
-                }
-            }
-            if getLastValueFlag && lastIndex < movedIndex { //处理最后一个数
-                moveOneBlock((dj, lastIndex), to:(dj, movedIndex))
-                hasChangeFlag = true
-                blockData[movedIndex, dj] = lastValue
-                blockData[lastIndex, dj] = 0
-            }
-        }
-        if hasChangeFlag {
-            insertRandom()
-        }
-    }
     
 }
