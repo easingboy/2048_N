@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
         // Override point for customization after application launch.
-        self.window = UIWindow(frame:UIScreen.mainScreen().bounds)
+        self.window = UIWindow(frame:UIScreen.main.bounds)
         self.window!.rootViewController = NumberGameViewController(dimension: 5)
         return true
     }

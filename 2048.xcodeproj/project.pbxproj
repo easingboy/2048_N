@@ -194,6 +194,7 @@
 				TargetAttributes = {
 					9B5B10BE1973D3E00003A37C = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = 4S3N6UL3R2;
 					};
 					9B5B10D01973D3E00003A37C = {
 						CreatedOnToolsVersion = 6.0;
@@ -206,6 +207,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -358,10 +360,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: hongping jiao (MU6QZKBR3H)";
+				DEVELOPMENT_TEAM = 4S3N6UL3R2;
 				INFOPLIST_FILE = 2048/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "D33CC0E7-C62D-4DF7-8BA5-62C55750D594";
+				PROVISIONING_PROFILE_SPECIFIER = GCloud_Dev_Wildcard_0623;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -370,10 +376,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: hongping jiao (MU6QZKBR3H)";
+				DEVELOPMENT_TEAM = 4S3N6UL3R2;
 				INFOPLIST_FILE = 2048/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "D33CC0E7-C62D-4DF7-8BA5-62C55750D594";
+				PROVISIONING_PROFILE_SPECIFIER = GCloud_Dev_Wildcard_0623;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

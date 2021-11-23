@@ -10,8 +10,8 @@ import UIKit
 
 class ScoreView : UIView {
     var colorDesignInterface: ColorDesign = ColorDesign()
-    let defaultFrame = CGRectMake(10, 30, 300, 110)
-    let defaultFrame1 = CGRectMake(130, 30, 180, 50)
+    let defaultFrame = CGRect(x: 10, y: 30, width: 300, height: 110)
+    let defaultFrame1 = CGRect(x: 130, y: 30, width: 180, height: 50)
     var label: UILabel
     var logoLabel: UILabel
     var authLabel: UILabel
@@ -24,29 +24,29 @@ class ScoreView : UIView {
     }
     
     init(score:Int) {
-        label = UILabel(frame: CGRectMake(120, 0, 180, 60))
-        label.textAlignment = NSTextAlignment.Center
-        scoreBlock = UIView(frame: CGRectMake(120, 0, 180, 60))
+        label = UILabel(frame: CGRect(x: 120, y: 0, width: 180, height: 60))
+        label.textAlignment = NSTextAlignment.center
+        scoreBlock = UIView(frame: CGRect(x: 120, y: 0, width: 180, height: 60))
         scoreBlock.backgroundColor = colorDesignInterface.bgcolorForBoard()
         scoreBlock.layer.cornerRadius = 10.0
-        logoLabel = UILabel(frame: CGRectMake(0, 0, 110, 110))
-        logoLabel.textAlignment = NSTextAlignment.Center
+        logoLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 110, height: 110))
+        logoLabel.textAlignment = NSTextAlignment.center
         logoLabel.text = "2048"
-        logoLabel.textColor = UIColor.whiteColor()
-        logoLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 30)
+        logoLabel.textColor = UIColor.white
+        logoLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 30)!
         
-        authLabel = UILabel(frame: CGRectMake(120, 70, 180, 40))
-        authLabel.textAlignment = NSTextAlignment.Center
+        authLabel = UILabel(frame: CGRect(x: 120, y: 70, width: 180, height: 40))
+        authLabel.textAlignment = NSTextAlignment.center
         authLabel.text = "成功在于积累"
         authLabel.font = UIFont(name: "HelveticaNeue", size: 25)
         
-        logoView = UIView(frame: CGRectMake(0, 0, 110, 110))
-        logoView.backgroundColor = UIColor.orangeColor()
+        logoView = UIView(frame: CGRect(x: 0, y: 0, width: 110, height: 110))
+        logoView.backgroundColor = UIColor.orange
         logoView.layer.cornerRadius = 10.0
 
         super.init(frame: defaultFrame)
         //backgroundColor = colorDesignInterface.bgcolorForBoard()
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white
         label.font = colorDesignInterface.fontForNumbers()
         label.text = "分数: 0"
         layer.cornerRadius = 10.0
@@ -55,6 +55,10 @@ class ScoreView : UIView {
         self.addSubview(label)
         self.addSubview(logoLabel)
         self.addSubview(authLabel)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func scoreChanged(newScore s: Int)  {

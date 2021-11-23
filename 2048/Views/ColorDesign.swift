@@ -8,7 +8,7 @@
 
 import UIKit
 
-@class_protocol protocol ColorDesignProtocol {
+protocol ColorDesignProtocol {
     func blockColor(value: Int) -> UIColor
     func numberColor(value: Int) -> UIColor
     func fontForNumbers() -> UIFont
@@ -33,7 +33,7 @@ class ColorDesign: ColorDesignProtocol {
         case 128, 256, 512, 1024, 2048:
             return UIColor(red: 237.0/255.0, green: 207.0/255.0, blue: 114.0/255.0, alpha: 1.0)
         default:
-            return UIColor.whiteColor()
+            return UIColor.white
         }
     }
     
@@ -43,13 +43,13 @@ class ColorDesign: ColorDesignProtocol {
         case 2, 4:
             return UIColor(red: 119.0/255.0, green: 110.0/255.0, blue: 101.0/255.0, alpha: 1.0)
         default:
-            return UIColor.whiteColor()
+            return UIColor.white
         }
     }
     
     // Provide the font to be used on the number tiles
     func fontForNumbers() -> UIFont {
-        return UIFont(name: "HelveticaNeue-Bold", size: 20)
+        return UIFont(name: "HelveticaNeue-Bold", size: 20)!
     }
     
     func bgcolorForBoard() -> UIColor {
