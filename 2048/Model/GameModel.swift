@@ -32,7 +32,7 @@ class GameboardModel  {
     
     func getEmptyCount() -> Int {
         var emptyCount = 0
-        for i in 0...(dimension*dimension) {
+        for i in 0...(dimension*dimension-1) {
             if boardData[i] == 0 {
                 emptyCount += 1
             }
@@ -45,7 +45,7 @@ class GameboardModel  {
         //println("empty\(emptyTotal)")
         let index = Int(arc4random_uniform(UInt32(emptyTotal-1)))
         var emptyCount = 0
-        for i in 0...(dimension*dimension) {
+        for i in 0...(dimension*dimension-1) {
             if boardData[i] == 0 {
                 if emptyCount == index {
                     boardData[i] = value
@@ -62,10 +62,10 @@ class GameboardModel  {
         var currentValue1:Int
         var lastValue2:Int
         var currentValue2:Int
-        for i in 0...dimension {
+        for i in 0...(dimension-1) {
             lastValue1 = -1
             lastValue2 = -1
-            for j in 0...dimension {
+            for j in 0...(dimension-1) {
                 currentValue1 = boardData[i*dimension + j]
                 currentValue2 = boardData[j*dimension + i]
                 if (currentValue1 == lastValue1) || (currentValue2 == lastValue2) {
@@ -89,8 +89,8 @@ class GameboardModel  {
     }
     
     func resetModel() {
-        for i in 0...dimension {
-            for j in 0...dimension {
+        for i in 0...(dimension-1) {
+            for j in 0...(dimension-1) {
                 self[i, j] = 0
             }
         }

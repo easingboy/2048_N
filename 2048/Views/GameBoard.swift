@@ -55,8 +55,8 @@ class GameboardView : UIView {
         background.backgroundColor = colorDesignInterface.bgcolorForBoard()
         addSubview(background)
         
-        for i in 0...dimension {
-            for j in 0...dimension {
+        for i in 0...(dimension-1) {
+            for j in 0...(dimension-1) {
                 // Draw each tile
                 let background = UIView(frame: CGRect(x: boardX + paddingWidth + CGFloat(i) * (blockWidth+paddingWidth), y: boardY + paddingWidth + CGFloat(j) * (blockWidth+paddingWidth), width: blockWidth, height: blockWidth))
                 background.layer.cornerRadius = cornerRadius
@@ -199,7 +199,7 @@ class GameboardView : UIView {
         var lastValue:Int
         var lastIndex:Int
         var movedIndex:Int
-        for di in 0...dimension {
+        for di in 0...(dimension-1) {
             getLastValueFlag = false
             lastValue = -1
             if leftup_or_rightdown == 1 {
@@ -210,7 +210,7 @@ class GameboardView : UIView {
                 lastIndex = dimension
                 movedIndex = dimension-1
             }
-            for j in 0...dimension {
+            for j in 0...(dimension-1) {
                 var dj:Int = 0
                 if leftup_or_rightdown == 1 {dj = j}
                 else {dj = dimension-1 - j}

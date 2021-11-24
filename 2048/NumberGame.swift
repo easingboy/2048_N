@@ -46,7 +46,7 @@ class NumberGameViewController : UIViewController, Protocol4GameView {
         //resetBtn.font = UIFont(name: "HelveticaNeue-Bold", size: 30)!//todo
         resetBtn.setTitleColor(UIColor.gray, for: UIControl.State.highlighted)
         resetBtn.setTitleColor(UIColor.red, for: UIControl.State.normal)
-        resetBtn.addTarget(self, action: Selector("buttonClick:"), for: UIControl.Event.touchUpInside)
+        resetBtn.addTarget(self, action: #selector(self.buttonClick(_:)), for: UIControl.Event.touchUpInside)
     }
     
     func setupGameView() {
@@ -62,22 +62,22 @@ class NumberGameViewController : UIViewController, Protocol4GameView {
     
     
     func setupGestureControls() {
-        let upSwipe = UISwipeGestureRecognizer(target: self, action: Selector("upCommand"))
+        let upSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.upCommand))
         upSwipe.numberOfTouchesRequired = 1
         upSwipe.direction = UISwipeGestureRecognizer.Direction.up
         view.addGestureRecognizer(upSwipe)
         
-        let downSwipe = UISwipeGestureRecognizer(target: self, action: Selector("downCommand"))
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.downCommand))
         downSwipe.numberOfTouchesRequired = 1
         downSwipe.direction = UISwipeGestureRecognizer.Direction.down
         view.addGestureRecognizer(downSwipe)
         
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: Selector("leftCommand"))
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.leftCommand))
         leftSwipe.numberOfTouchesRequired = 1
         leftSwipe.direction = UISwipeGestureRecognizer.Direction.left
         view.addGestureRecognizer(leftSwipe)
         
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: Selector("rightCommand"))
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.rightCommand))
         rightSwipe.numberOfTouchesRequired = 1
         rightSwipe.direction = UISwipeGestureRecognizer.Direction.right
         view.addGestureRecognizer(rightSwipe)
@@ -87,24 +87,24 @@ class NumberGameViewController : UIViewController, Protocol4GameView {
         view.addSubview(resetBtn)
     }
     
-    func buttonClick(sender:UIButton!) {
+    @objc func buttonClick(_ sender:UIButton!) {
         board!.resetGame()
         resetBtn.removeFromSuperview()
     }
     
-    func leftCommand() {
+    @objc func leftCommand() {
         board!.flick(direct: 3)
     }
     
-    func rightCommand() {
+    @objc func rightCommand() {
         board!.flick(direct: 2)
     }
     
-    func upCommand() {
+    @objc func upCommand() {
         board!.flick(direct: 1)
     }
     
-    func downCommand() {
+    @objc func downCommand() {
         board!.flick(direct: 0)
     }
 
